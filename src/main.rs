@@ -81,12 +81,23 @@ fn view(app: &App, _: &Model, frame: Frame) {
         .xy(text.xy())
         .wh(text.wh());
     let server = text.below(text).shift_y(10.0);
-    draw.rect().color(WHITE).wh(server.wh()).xy(server.xy());
     let sin_wave = app.time.sin();
     let p = map_range(sin_wave, -1.0, 1.0, 0.0, 100.0);
+    draw.rect().color(WHITE).wh(server.wh()).xy(server.xy());
     make_vu_graph(&VuStyle{line_width: 4.0, 
         color_off: rgba(1.0,0.1,0.1,0.5), ..Default::default()}, 
         p, &draw, server);
+    
+    let small_vu = Rect::from_w_h(250.0, 20.0)
+                          .below(server)
+                          .shift_y(-3.0)
+                          .align_left_of(server);
+    let cos_wave = (app.time/4.0).cos();
+    let p = map_range(cos_wave, -1.0, 1.0, 0.0, 100.0);
+    make_vu_graph(&VuStyle{line_width: 2.0,
+        color_on: rgba(0.1, 0.1, 1.0, 0.5), 
+        color_off: rgba(1.0,0.1,0.1,0.5), ..Default::default()}, 
+        p, &draw, small_vu);
     draw.to_frame(app, &frame).unwrap();
 }
 
