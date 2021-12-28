@@ -4,26 +4,49 @@ mod vu_graph;
 mod utils;
 mod sparklines;
 
-struct Model {}
-
-
-fn model(_: &App) -> Model {
-    Model {}
+struct Model {
+    rate: f64,
 }
+
+
+fn model(app: &App) -> Model {
+    app.new_window()
+        .received_character(received_char)
+        .build()
+        .unwrap();
+    Model {rate: 1.0}
+}
+
+fn received_char(app: &App, model: &mut Model, c: char) {
+    match c {
+        'q' => app.quit(),
+        '+' => { model.rate += 0.5 },
+        '-' => { model.rate -= 0.5 }
+        _ => println!("Huh?")
+    }; 
+}
+
 fn update(_: &App, _: &mut Model, _: Update) {}
 
-fn view(app: &App, _: &Model, frame: Frame) {
+fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
     draw.background().color(BLACK);
     let win = app.window_rect();
-    let text = Rect::from_w_h(500.0, 60.0).top_left_of(win.pad(25.0));
-    draw.text("Hello")
+    let rate = format!("Rate: {:.2}", model.rate);
+    let t = nannou::text::text(&rate)
+            .left_justify()
+            .font_size(12)
+            .build(Rect::from_w_h(500.0, 60.0).top_left_of(win));
+    let text = Rect::from_w_h(t.width(), 2.0*t.height()).top_left_of(win);
+    draw.text(&rate)
         .color(WHITE)
-        .font_size(32)
-        .align_text_middle_y()
+        .left_justify()
+        .font_size(12)
         .xy(text.xy())
         .wh(text.wh());
-    let server = text.below(text).shift_y(10.0);
+    let server = Rect::from_w_h(500.0, 60.0)
+                 .below(text)
+                 .align_left_of(text);
     let sin_wave = app.time.sin();
     let p = map_range(sin_wave, -1.0, 1.0, 0.0, 100.0);
     draw.rect().color(WHITE).wh(server.wh()).xy(server.xy());
@@ -64,8 +87,8 @@ fn view(app: &App, _: &Model, frame: Frame) {
         &Default::default(),
         &v,
         ((app.duration.since_start.as_millis() / 100) as usize) % v.len(),
-        -1.0,
-        1.0,
+        -0.2,
+        0.2,
         &draw,
         small_spark,
     );
@@ -74,5 +97,5 @@ fn view(app: &App, _: &Model, frame: Frame) {
 }
 
 fn main() {
-    nannou::app(model).update(update).simple_window(view).run();
+    nannou::app(model).update(update).view(view).run();
 }

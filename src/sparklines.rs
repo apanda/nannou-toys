@@ -31,6 +31,7 @@ pub fn make_sparklines(
     let gap_width = width / values.len() as f32;
     let y_scale = height / (ymax - ymin);
     let points = utils::ring(values, index).enumerate().map(|(x, y)| {
+        let y = f32::max(f32::min(*y, ymax), ymin);
         (
             pt2(
                 (x as f32) * gap_width + rect.left(),
