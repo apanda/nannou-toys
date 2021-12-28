@@ -67,7 +67,7 @@ pub struct RingIterator<'a, T> {
 pub fn ring<'a, T>(slice: &'a [T], index: usize) -> RingIterator<'a, T> {
     RingIterator {
         slice,
-        index: index,
+        index,
         len: slice.len(),
         visited: 0,
     }
@@ -177,7 +177,6 @@ fn view(app: &App, _: &Model, frame: Frame) {
             line_width: 2.0,
             color_on: rgba(0.1, 0.1, 1.0, 0.5),
             color_off: rgba(1.0, 0.1, 0.1, 0.5),
-            ..Default::default()
         },
         p,
         &draw,
