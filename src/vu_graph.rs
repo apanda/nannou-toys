@@ -1,6 +1,6 @@
 //! VU graph module.
 
-use nannou::prelude::*;
+use nannou::prelude::{pt2, rgba, Rgb, Rgba, Vec2, SPRINGGREEN};
 
 /// Style information for a VU graph.
 #[derive(Debug)]
