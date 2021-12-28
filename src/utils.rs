@@ -1,5 +1,6 @@
 //! Utilities used by various things.
-
+use nannou::geom::Rect;
+use nannou::text::FontSize;
 /// An iterator that treats `slice` as a ring buffer and iterates
 /// from a starting index. Created using the `ring` function below.
 pub struct RingIterator<'a, T> {
@@ -28,9 +29,9 @@ impl<'a, T> Iterator for RingIterator<'a, T> {
 }
 
 /// Create a ring iterator starting from `index`.
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// let it =  ring(&[1, 2, 3], 1);
 /// assert_eq!(it.next(), 2);
@@ -42,4 +43,16 @@ pub fn ring<'a, T>(slice: &'a [T], index: usize) -> RingIterator<'a, T> {
         len: slice.len(),
         visited: 0,
     }
+}
+
+/// Get dimensions for string `text` when rendered at font size `font_size`
+/// in the given `rect`.
+///
+pub fn get_dimensions(text: &str, font_size: FontSize, rect: Rect) -> (f32, f32) {
+    let t = nannou::text::text(text)
+        .left_justify()
+        .font_size(font_size)
+        .build(rect);
+    // Multiplying by 2 because this seems wrong in the current world.
+    (t.width(), t.height() * 2.0)
 }

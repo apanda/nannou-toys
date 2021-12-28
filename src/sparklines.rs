@@ -1,5 +1,5 @@
-use nannou::prelude::*;
 use super::utils;
+use nannou::prelude::*;
 
 /// Style information for a spark line.
 #[derive(Debug)]
