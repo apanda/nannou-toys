@@ -1,10 +1,5 @@
 use nannou::prelude::*;
-
-mod sparklines;
-mod utils;
-mod vu_graph;
-mod text_label;
-
+use nannou_toys::*;
 struct Model {
     rate: f64,
 }
@@ -34,9 +29,8 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let win = app.window_rect();
     let rate = format!("Rate: {:.2}", model.rate);
 
-    let text = text_label::make_label(&rate, Default::default(), &draw, win);
-
-    let server = Rect::from_w_h(500.0, 60.0).below(text).align_left_of(text);
+    let text = text_label::make_label(&rate, &Default::default(), &draw, win);
+    let server = Rect::from_w_h(500.0, 60.0).top_left_of(win.pad_top(text.h() + 4.0)).align_left_of(text);
 
     let sin_wave = app.time.sin();
 
@@ -85,6 +79,31 @@ fn view(app: &App, model: &Model, frame: Frame) {
         0.2,
         &draw,
         small_spark,
+    );
+    let lstack = Rect::from_w_h(250.0, 120.0)
+        .below(small_spark)
+        .align_left_of(small_spark)
+        .shift_y(-3.0);
+    let lstack_actual = label_stack::make_label_stack(
+        &["food", "fo", "bar"],
+        &label_stack::StackStyle {
+            styles: vec![Default::default(), Default::default(), Default::default()],
+            padding: 4.0,
+        },
+        &draw,
+        lstack,
+    );
+    let lab2 = Rect::from_w_h(250.0, 20.0)
+        .below(lstack_actual)
+        .align_left_of(lstack);
+    let _ = text_label::make_label(
+        &"Border",
+        &text_label::LabelStyle {
+            color: rgba(1.0, 0.0, 0.0, 1.0),
+            ..Default::default()
+        },
+        &draw,
+        lab2,
     );
 
     draw.to_frame(app, &frame).unwrap();

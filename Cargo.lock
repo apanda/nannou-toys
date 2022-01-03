@@ -1166,6 +1166,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "nannou-toys"
+version = "0.1.0"
+dependencies = [
+ "nannou",
+]
+
+[[package]]
 name = "nannou_core"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1198,13 +1205,6 @@ dependencies = [
  "instant",
  "num_cpus",
  "wgpu",
-]
-
-[[package]]
-name = "nanou-test"
-version = "0.1.0"
-dependencies = [
- "nannou",
 ]
 
 [[package]]

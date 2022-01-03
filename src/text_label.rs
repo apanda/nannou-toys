@@ -1,9 +1,9 @@
 //! Reusable text label: add text to a given rect.
-use nannou::geom::Rect;
-use nannou::Draw;
-use nannou::color::{rgba, Rgba};
-use nannou::text::{FontSize};
 use super::utils;
+use nannou::color::{rgba, Rgba};
+use nannou::geom::Rect;
+use nannou::text::FontSize;
+use nannou::Draw;
 
 pub struct LabelStyle {
     pub color: Rgba,
@@ -12,7 +12,7 @@ pub struct LabelStyle {
 
 impl Default for LabelStyle {
     fn default() -> Self {
-        LabelStyle{
+        LabelStyle {
             color: rgba(1.0, 1.0, 1.0, 1.0),
             font_size: 12,
         }
@@ -23,7 +23,7 @@ impl Default for LabelStyle {
 /// Returns the actual `rect` occupied by the text. Note, graphs and
 /// other things we draw, the text size is not determined by the input
 /// `rect`.
-pub fn make_label(t: &str, style: LabelStyle, draw: &Draw, rect: Rect) -> Rect {
+pub fn make_label(t: &str, style: &LabelStyle, draw: &Draw, rect: Rect) -> Rect {
     let (w, h) = utils::get_dimensions(t, style.font_size, rect);
     let r = Rect::from_w_h(w, h).top_left_of(rect);
     draw.text(t)
