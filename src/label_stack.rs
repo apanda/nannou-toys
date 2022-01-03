@@ -31,6 +31,5 @@ pub fn make_label_stack(labels: &[&str], style: &StackStyle, draw: &Draw, rect: 
             let r_text = make_label(text, lstyle, draw, rect);
             rect.pad_top(r_text.h() + style.padding)
         });
-    let ret = Rect::from_w_h(left.w(), f32::abs(rect.top() - left.top())).top_left_of(rect);
-    ret
+    Rect::from_w_h(left.w(), f32::abs(rect.top() - left.top())).top_left_of(rect)
 }
