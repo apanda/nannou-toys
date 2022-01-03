@@ -3,6 +3,7 @@ use nannou::prelude::*;
 mod sparklines;
 mod utils;
 mod vu_graph;
+mod text_label;
 
 struct Model {
     rate: f64,
@@ -32,18 +33,17 @@ fn view(app: &App, model: &Model, frame: Frame) {
     draw.background().color(BLACK);
     let win = app.window_rect();
     let rate = format!("Rate: {:.2}", model.rate);
-    let (t_w, t_h) = utils::get_dimensions(&rate, 12, win);
-    let text = Rect::from_w_h(t_w, t_h).top_left_of(win);
-    draw.text(&rate)
-        .color(WHITE)
-        .left_justify()
-        .font_size(12)
-        .xy(text.xy())
-        .wh(text.wh());
+
+    let text = text_label::make_label(&rate, Default::default(), &draw, win);
+
     let server = Rect::from_w_h(500.0, 60.0).below(text).align_left_of(text);
+
     let sin_wave = app.time.sin();
+
     let p = map_range(sin_wave, -1.0, 1.0, 0.0, 100.0);
+
     draw.rect().color(WHITE).wh(server.wh()).xy(server.xy());
+
     vu_graph::make_vu_graph(
         &vu_graph::VuStyle {
             line_width: 4.0,

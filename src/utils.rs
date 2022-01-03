@@ -1,6 +1,6 @@
 //! Utilities used by various things.
 use nannou::geom::Rect;
-use nannou::text::FontSize;
+use nannou::text::{FontSize};
 /// An iterator that treats `slice` as a ring buffer and iterates
 /// from a starting index. Created using the `ring` function below.
 pub struct RingIterator<'a, T> {
