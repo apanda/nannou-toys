@@ -1,14 +1,25 @@
+
+//! Draw linecharts in Nannou.
+//! 
+//! Styles are provided by LineChartStyle.
 use super::{label_stack, sparklines, text_label};
 use nannou::{draw::Draw, geom::Rect};
 
-// Style information for a line chart
+/// Style information for a line chart
 #[derive(Debug)]
 pub struct LineChartStyle {
+    /// A vector of styles used to draw each of the lines.
     pub line_styles: Vec<sparklines::SparkLineStyle>,
+    /// Labels used when drawing a legend.
     pub labels: Vec<String>,
+    /// A boolean indicating whether a legend should be drawn.
     pub legend: bool,
 }
 
+/// Draw a line chart using values from `values`, starting out at `index`.
+/// Similar to the [sparklines](sparklines) each series is treated as a ring buffer,
+/// i.e., indices wrap around starting at index.
+/// The line chart (including index) fits within `rect`.
 pub fn make_linechart<'a, I: IntoIterator<Item = &'a [f32]>>(
     style: &LineChartStyle,
     values: I,
