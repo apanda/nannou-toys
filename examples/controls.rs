@@ -127,6 +127,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
                 ..Default::default()
             },
         legend: true,
+        legend_fontsize: 16,
         ..Default::default()
     };
 

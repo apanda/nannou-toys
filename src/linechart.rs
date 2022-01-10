@@ -3,7 +3,7 @@
 //! 
 //! Styles are provided by LineChartStyle.
 use super::{label_stack, sparklines, text_label};
-use nannou::{draw::Draw, geom::Rect, geom::pt2};
+use nannou::{draw::Draw, geom::Rect, geom::pt2, text::FontSize};
 
 /// Style information for a line chart
 #[derive(Debug)]
@@ -14,6 +14,7 @@ pub struct LineChartStyle {
     pub labels: Vec<String>,
     /// A boolean indicating whether a legend should be drawn.
     pub legend: bool,
+    pub legend_fontsize: FontSize,
     pub y_tics: Vec<f32>,
     pub y_tic_style: sparklines::SparkLineStyle,
 }
@@ -24,6 +25,7 @@ impl Default for LineChartStyle {
             line_styles: vec!(),
             labels: vec!(),
             legend: false,
+            legend_fontsize: 12,
             y_tics: vec!(),
             y_tic_style: Default::default(),
         }
@@ -50,6 +52,7 @@ pub fn make_linechart<'a, I: IntoIterator<Item = &'a [f32]>>(
                 .iter()
                 .map(|s| text_label::LabelStyle {
                     color: s.color,
+                    font_size: style.legend_fontsize,
                     ..Default::default()
                 })
                 .collect(),
@@ -57,7 +60,8 @@ pub fn make_linechart<'a, I: IntoIterator<Item = &'a [f32]>>(
         };
         let lrect =
             label_stack::calculate_extents(style.labels.iter().map(|s| &s[..]), &lstyle, rect);
-        let trect = lrect.align_right_of(rect);
+        let trect = lrect.align_right_of(rect)
+                         .align_middle_y_of(rect);
         label_stack::make_label_stack(style.labels.iter().map(|s| &s[..]), &lstyle, draw, trect);
         rect.pad_right(trect.w())
     } else {
