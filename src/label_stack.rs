@@ -9,7 +9,11 @@ pub struct StackStyle {
 }
 
 /// Calculate the dimensions of the label stack.
-pub fn calculate_extents(labels: &[&str], style: &StackStyle, rect: Rect) -> Rect {
+pub fn calculate_extents<'a, I: IntoIterator<Item = &'a str>>(
+    labels: I,
+    style: &StackStyle,
+    rect: Rect,
+) -> Rect {
     let (w, h) = style
         .styles
         .iter()
@@ -22,14 +26,19 @@ pub fn calculate_extents(labels: &[&str], style: &StackStyle, rect: Rect) -> Rec
 }
 
 /// Draw a label stack with the given set of labels at `rect`.
-pub fn make_label_stack(labels: &[&str], style: &StackStyle, draw: &Draw, rect: Rect) -> Rect {
+pub fn make_label_stack<'a, I: IntoIterator<Item = &'a str>>(
+    labels: I,
+    style: &StackStyle,
+    draw: &Draw,
+    rect: Rect,
+) -> Rect {
     let left = style
         .styles
         .iter()
         .zip(labels)
         .fold(rect, |rect, (lstyle, text)| {
             let r_text = make_label(text, lstyle, draw, rect);
-            rect.pad_top(r_text.h() + style.padding)
+            rect.shift_y(-1.0 * (r_text.h() + style.padding))
         });
     Rect::from_w_h(left.w(), f32::abs(rect.top() - left.top())).top_left_of(rect)
 }

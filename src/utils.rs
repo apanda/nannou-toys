@@ -36,7 +36,7 @@ impl<'a, T> Iterator for RingIterator<'a, T> {
 /// let it =  ring(&[1, 2, 3], 1);
 /// assert_eq!(it.next(), 2);
 /// ```
-pub fn ring<'a, T>(slice: &'a [T], index: usize) -> RingIterator<'a, T> {
+pub fn ring<T>(slice: &[T], index: usize) -> RingIterator<'_, T> {
     RingIterator {
         slice,
         index,
