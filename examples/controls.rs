@@ -111,10 +111,6 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let line_style = linechart::LineChartStyle {
         line_styles: vec![
             sparklines::SparkLineStyle {
-                color: rgba(0.3, 0.3, 0.3, 0.8),
-                ..Default::default()
-            },
-            sparklines::SparkLineStyle {
                 points: true,
                 ..Default::default()
             },
@@ -124,11 +120,16 @@ fn view(app: &App, model: &Model, frame: Frame) {
                 ..Default::default()
             },
         ],
-        labels: vec!["origin".to_string(), "sin".to_string(), "cos".to_string()],
+        labels: vec!["sin".to_string(), "cos".to_string()],
+        y_tics: vec!(-1.0, -0.5, 0.0, 0.5, 1.0),
+        y_tic_style: sparklines::SparkLineStyle {
+                color: rgba(0.3, 0.3, 0.3, 0.8),
+                ..Default::default()
+            },
         legend: true,
+        ..Default::default()
     };
 
-    let origin = vec![0.0; 10];
     let v0 = (0..10)
         .map(|i| (std::f32::consts::PI * 0.5 * (i as f32)).sin())
         .collect::<Vec<_>>();
@@ -138,7 +139,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let line_rect = Rect::from_w_h(300.0, 100.0).below(lab2).align_left_of(lab2);
     linechart::make_linechart(
         &line_style,
-        vec![&origin[..], &v0, &w0],
+        vec![&v0[..], &w0],
         0,
         -1.3,
         1.3,

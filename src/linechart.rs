@@ -3,7 +3,7 @@
 //! 
 //! Styles are provided by LineChartStyle.
 use super::{label_stack, sparklines, text_label};
-use nannou::{draw::Draw, geom::Rect};
+use nannou::{draw::Draw, geom::Rect, geom::pt2};
 
 /// Style information for a line chart
 #[derive(Debug)]
@@ -14,6 +14,20 @@ pub struct LineChartStyle {
     pub labels: Vec<String>,
     /// A boolean indicating whether a legend should be drawn.
     pub legend: bool,
+    pub y_tics: Vec<f32>,
+    pub y_tic_style: sparklines::SparkLineStyle,
+}
+
+impl Default for LineChartStyle {
+    fn default() -> Self {
+        LineChartStyle {
+            line_styles: vec!(),
+            labels: vec!(),
+            legend: false,
+            y_tics: vec!(),
+            y_tic_style: Default::default(),
+        }
+    }
 }
 
 /// Draw a line chart using values from `values`, starting out at `index`.
@@ -49,6 +63,17 @@ pub fn make_linechart<'a, I: IntoIterator<Item = &'a [f32]>>(
     } else {
         rect
     };
+    for y_tic in style.y_tics.iter() {
+        let y_scale = rect.h() / (ymax - ymin);
+        let y = f32::max(f32::min(*y_tic, ymax), ymin);
+        let y = (y - ymin) * y_scale + rect.bottom();
+        draw.line()
+            .start(pt2(rect.left(), y))
+            .end(pt2(rect.right(), y))
+            .color(style.y_tic_style.color)
+            .weight(style.y_tic_style.line_width)
+            .finish();
+    }
     for (vals, style) in values.into_iter().zip(style.line_styles.iter()) {
         sparklines::make_sparklines(style, vals, index, ymin, ymax, draw, rect);
     }
